@@ -55,9 +55,9 @@ export default function SolutionCard({ model, content, isLoading, isWinner }) {
       `}
     >
       {/* Card Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200/50 dark:border-white/10 shrink-0">
         <div className="flex items-center gap-3">
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg bg-gradient-to-br ${meta.accent} border border-white/10`}>
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg bg-gradient-to-br ${meta.accent} border border-slate-200/50 dark:border-white/10`}>
             {meta.icon}
           </div>
           <div>
@@ -70,7 +70,7 @@ export default function SolutionCard({ model, content, isLoading, isWinner }) {
 
         <div className="flex items-center gap-2">
           {isWinner && (
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-yellow-400/15 text-yellow-300 border border-yellow-400/30">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-yellow-300 dark:bg-yellow-400/15 border border-amber-500/20 dark:border-yellow-400/30">
               👑 Winner
             </span>
           )}
@@ -102,15 +102,15 @@ export default function SolutionCard({ model, content, isLoading, isWinner }) {
       </div>
 
       {/* Card Body */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 text-sm leading-relaxed text-white/80 font-light scroll-smooth">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 text-sm leading-relaxed text-slate-700 dark:text-white/80 font-light scroll-smooth">
         {isLoading ? (
           <Skeleton />
         ) : content ? (
-          <div className="prose prose-invert prose-sm max-w-none">
+          <div className="prose dark:prose-invert prose-sm max-w-none">
             <TypewriterText text={content} speed={2} onUpdate={handleUpdate} />
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-white/30 gap-3">
+          <div className="flex flex-col items-center justify-center h-full text-slate-400 dark:text-white/30 gap-3">
             <span className="text-4xl opacity-30">{meta.icon}</span>
             <p className="text-xs">Waiting for response…</p>
           </div>

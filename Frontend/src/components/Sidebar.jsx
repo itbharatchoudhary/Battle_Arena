@@ -24,10 +24,10 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
     <motion.aside
       animate={{ width: collapsed ? 56 : 260 }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className="glass border-r border-white/10 flex flex-col h-full shrink-0 overflow-hidden"
+      className="glass border-r border-slate-200 dark:border-white/10 flex flex-col h-full shrink-0 overflow-hidden"
     >
       {/* Top Logo Row */}
-      <div className="flex items-center h-14 px-3 border-b border-white/10 shrink-0">
+      <div className="flex items-center h-14 px-3 border-b border-slate-200 dark:border-white/10 shrink-0">
         <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-blue-600 flex items-center justify-center shrink-0 shadow-lg shadow-violet-500/30">
           <span className="text-sm">⚔️</span>
         </div>
@@ -41,7 +41,7 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
               className="ml-2.5 overflow-hidden"
             >
               <span className="font-bold text-sm gradient-text whitespace-nowrap">Battle Arena</span>
-              <p className="text-white/30 text-[10px] whitespace-nowrap">AI Comparison Engine</p>
+              <p className="text-slate-500 dark:text-white/30 text-[10px] whitespace-nowrap">AI Comparison Engine</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -82,12 +82,12 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
       <div className="flex-1 overflow-y-auto px-2 pb-2">
         {!collapsed && (
           <div className="flex items-center justify-between px-2 mb-2">
-            <span className="text-[10px] uppercase tracking-widest text-white/30 font-semibold">History</span>
+            <span className="text-[10px] uppercase tracking-widest text-slate-400 dark:text-white/30 font-semibold">History</span>
             {history.length > 0 && (
               <button
                 onClick={() => confirmClear ? (onClearHistory(), setConfirmClear(false)) : setConfirmClear(true)}
                 onBlur={() => setTimeout(() => setConfirmClear(false), 300)}
-                className="text-[10px] text-white/30 hover:text-red-400 transition-colors"
+                className="text-[10px] text-slate-400 dark:text-white/30 hover:text-red-500 dark:hover:text-red-400 transition-colors"
               >
                 {confirmClear ? 'Confirm?' : 'Clear'}
               </button>
@@ -96,7 +96,7 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
         )}
 
         {history.length === 0 && !collapsed && (
-          <div className="flex flex-col items-center justify-center py-8 text-white/20 text-xs text-center gap-2">
+          <div className="flex flex-col items-center justify-center py-8 text-slate-400 dark:text-white/20 text-xs text-center gap-2">
             <span className="text-2xl">🏟️</span>
             <p>No battles yet.<br />Start your first one!</p>
           </div>
@@ -117,17 +117,17 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
                 <span className="text-base">⚔️</span>
               ) : (
                 <div>
-                  <p className="text-xs text-white/70 font-medium truncate leading-tight mb-0.5">
+                  <p className="text-xs text-slate-700 dark:text-white/70 font-medium truncate leading-tight mb-0.5">
                     {entry.problem}
                   </p>
-                  <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+                  <div className="flex items-center gap-1.5 text-[10px] text-slate-400 dark:text-white/30">
                     <span>{formatDate(entry.timestamp)}</span>
                     <span>·</span>
                     <span>{formatTime(entry.timestamp)}</span>
                     {entry.result?.judge && (
                       <>
                         <span>·</span>
-                        <span className="text-violet-400">
+                        <span className="text-violet-500 dark:text-violet-400">
                           {entry.result.judge.solution_1_score > entry.result.judge.solution_2_score
                             ? '🔥 Mistral'
                             : entry.result.judge.solution_2_score > entry.result.judge.solution_1_score
@@ -145,7 +145,7 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
       </div>
 
       {/* Footer: Dark Mode Toggle */}
-      <div className="px-2 py-3 border-t border-white/10 shrink-0">
+      <div className="px-2 py-3 border-t border-slate-200 dark:border-white/10 shrink-0">
         <button
           id="dark-mode-toggle"
           onClick={onToggleDark}
@@ -158,7 +158,7 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
         >
           <span className="text-base shrink-0">{darkMode ? '☀️' : '🌙'}</span>
           {!collapsed && (
-            <span className="text-white/50">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
+            <span className="text-slate-600 dark:text-white/50">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
           )}
         </button>
       </div>

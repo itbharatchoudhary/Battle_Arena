@@ -18,15 +18,14 @@ function ReasoningAccordion({ label, icon, reasoning, color }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="rounded-xl overflow-hidden border border-white/10">
+    <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-white/10">
       <button
         onClick={() => setOpen(!open)}
-        className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium hover:bg-white/5 transition-colors`}
-        style={{ background: open ? 'rgba(255,255,255,0.04)' : 'transparent' }}
+        className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-white/5 transition-colors ${open ? 'bg-slate-50 dark:bg-white/[0.04]' : 'bg-transparent'}`}
       >
         <div className="flex items-center gap-2">
           <span>{icon}</span>
-          <span className="text-white/80">{label} Reasoning</span>
+          <span className="text-slate-700 dark:text-white/80">{label} Reasoning</span>
         </div>
         <ChevronIcon open={open} />
       </button>
@@ -39,7 +38,7 @@ function ReasoningAccordion({ label, icon, reasoning, color }) {
             transition={{ duration: 0.25, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div className="px-4 pb-4 pt-2 text-sm text-white/60 leading-relaxed border-t border-white/10">
+            <div className="px-4 pb-4 pt-2 text-sm text-slate-600 dark:text-white/60 leading-relaxed border-t border-slate-200 dark:border-white/10">
               {reasoning}
             </div>
           </motion.div>
@@ -74,16 +73,16 @@ export default function JudgePanel({ judge, isLoading, problem }) {
           ⚖️
         </div>
         <div>
-          <h3 className="font-semibold text-white text-sm">Gemini Judge</h3>
-          <p className="text-white/40 text-xs">AI-powered verdict</p>
+          <h3 className="font-semibold text-slate-800 dark:text-white text-sm">Gemini Judge</h3>
+          <p className="text-slate-500 dark:text-white/40 text-xs">AI-powered verdict</p>
         </div>
         {winner && winner !== 'tie' && (
-          <div className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-full bg-yellow-400/15 text-yellow-300 border border-yellow-400/30">
+          <div className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-yellow-300 dark:bg-yellow-400/15 border border-amber-500/20 dark:border-yellow-400/30">
             {winner === 'mistral' ? '🔥 Mistral Wins' : '⚡ Cohere Wins'}
           </div>
         )}
         {winner === 'tie' && (
-          <div className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-400/15 text-blue-300 border border-blue-400/30">
+          <div className="ml-auto text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-300 dark:bg-blue-400/15 border border-blue-500/20 dark:border-blue-400/30">
             🤝 It's a Tie!
           </div>
         )}
@@ -91,8 +90,8 @@ export default function JudgePanel({ judge, isLoading, problem }) {
 
       {/* Problem badge */}
       {problem && (
-        <div className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white/50 truncate">
-          <span className="text-white/30 mr-1">Problem:</span>
+        <div className="px-3 py-2 rounded-xl bg-slate-900/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs text-slate-600 dark:text-white/50 truncate">
+          <span className="text-slate-400 dark:text-white/30 mr-1">Problem:</span>
           {problem}
         </div>
       )}
@@ -120,11 +119,11 @@ export default function JudgePanel({ judge, isLoading, problem }) {
           </div>
 
           {/* Divider */}
-          <div className="h-px bg-white/10" />
+          <div className="h-px bg-slate-200 dark:bg-white/10" />
 
           {/* Reasoning Accordions */}
           <div className="flex flex-col gap-2">
-            <p className="text-xs text-white/40 font-medium uppercase tracking-widest mb-1">Judge Reasoning</p>
+            <p className="text-xs text-slate-500 dark:text-white/40 font-medium uppercase tracking-widest mb-1">Judge Reasoning</p>
             {judge.ideal_solution && (
               <ReasoningAccordion
                 label="Gemini's Ideal Answer"

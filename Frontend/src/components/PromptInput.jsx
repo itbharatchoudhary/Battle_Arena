@@ -25,7 +25,7 @@ export default function PromptInput({ onSubmit, isLoading, onReset, hasResult })
 
   return (
     <div className="glass rounded-2xl p-1 gradient-border">
-      <div className="relative rounded-[14px] overflow-hidden bg-black/20">
+      <div className="relative rounded-[14px] overflow-hidden bg-slate-900/5 dark:bg-black/20">
         <textarea
           ref={textareaRef}
           id="prompt-input"
@@ -33,8 +33,8 @@ export default function PromptInput({ onSubmit, isLoading, onReset, hasResult })
           disabled={isLoading}
           onKeyDown={handleKeyDown}
           className="
-            w-full bg-transparent px-5 pt-4 pb-2 text-sm text-white
-            placeholder-white/30 resize-none focus:outline-none
+            w-full bg-transparent px-5 pt-4 pb-2 text-sm text-slate-800 dark:text-white
+            placeholder-slate-400 dark:placeholder-white/30 resize-none focus:outline-none
             disabled:opacity-50 disabled:cursor-not-allowed
             leading-relaxed
           "
@@ -42,9 +42,9 @@ export default function PromptInput({ onSubmit, isLoading, onReset, hasResult })
         />
 
         <div className="flex items-center justify-between px-4 pb-3 pt-1">
-          <div className="flex items-center gap-2 text-white/25 text-xs">
-            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white/40 font-mono text-[10px]">⌘</kbd>
-            <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white/40 font-mono text-[10px]">↵</kbd>
+          <div className="flex items-center gap-2 text-slate-400 dark:text-white/25 text-xs">
+            <kbd className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-white/10 text-slate-500 dark:text-white/40 font-mono text-[10px]">⌘</kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-white/10 text-slate-500 dark:text-white/40 font-mono text-[10px]">↵</kbd>
             <span>to submit</span>
           </div>
 

@@ -30,11 +30,11 @@ function EmptyState() {
 
       <div className="max-w-md">
         <h1 className="text-3xl font-bold gradient-text mb-3">AI Battle Arena</h1>
-        <p className="text-white/40 text-sm leading-relaxed">
+        <p className="text-slate-600 dark:text-white/40 text-sm leading-relaxed">
           Submit any problem or question and watch{' '}
-          <span className="text-orange-400 font-medium">Mistral AI</span> and{' '}
-          <span className="text-violet-400 font-medium">Cohere AI</span> compete for the best answer.{' '}
-          <span className="text-blue-400 font-medium">Gemini</span> judges the winner.
+          <span className="text-orange-500 dark:text-orange-400 font-medium">Mistral AI</span> and{' '}
+          <span className="text-violet-500 dark:text-violet-400 font-medium">Cohere AI</span> compete for the best answer.{' '}
+          <span className="text-blue-500 dark:text-blue-400 font-medium">Gemini</span> judges the winner.
         </p>
       </div>
 
@@ -48,7 +48,7 @@ function EmptyState() {
         ].map(({ icon, label }) => (
           <div
             key={label}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass text-xs text-white/50 border border-white/10"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass text-xs text-slate-600 dark:text-white/50 border border-slate-200 dark:border-white/10"
           >
             <span>{icon}</span>
             <span>{label}</span>
@@ -93,21 +93,21 @@ function BattleView({ result, isLoading }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="flex-1 flex flex-col gap-4 min-h-0 overflow-hidden"
+      className="flex-1 flex flex-col gap-4 min-h-0 overflow-y-auto pr-1 pb-4"
     >
       {/* VS Header Bar */}
       <div className="flex items-center gap-4 shrink-0">
-        <div className="flex-1 h-px bg-gradient-to-r from-orange-500/40 to-transparent" />
-        <div className="flex items-center gap-3 px-4 py-1.5 rounded-full glass border border-white/10 text-xs font-bold">
-          <span className="text-orange-400">🔥 Mistral</span>
-          <span className="text-white/30">VS</span>
-          <span className="text-violet-400">Cohere ⚡</span>
+        <div className="flex-1 h-px bg-gradient-to-r from-orange-500/20 dark:from-orange-500/40 to-transparent" />
+        <div className="flex items-center gap-3 px-4 py-1.5 rounded-full glass border border-slate-200 dark:border-white/10 text-xs font-bold">
+          <span className="text-orange-500 dark:text-orange-400">🔥 Mistral</span>
+          <span className="text-slate-400 dark:text-white/30">VS</span>
+          <span className="text-violet-500 dark:text-violet-400">Cohere ⚡</span>
         </div>
-        <div className="flex-1 h-px bg-gradient-to-l from-violet-500/40 to-transparent" />
+        <div className="flex-1 h-px bg-gradient-to-l from-violet-500/20 dark:from-violet-500/40 to-transparent" />
       </div>
 
       {/* Split Cards */}
-      <div className="flex-1 grid grid-cols-2 gap-4 min-h-0 overflow-hidden">
+      <div className="flex-none grid grid-cols-2 gap-4 min-h-[400px]">
         <SolutionCard
           model="mistral"
           content={result?.solution_1}
@@ -168,14 +168,14 @@ export default function App() {
         {/* Top Bar */}
         <div className="flex items-center justify-between shrink-0">
           <div>
-            <h2 className="text-base font-semibold text-white/90">
+            <h2 className="text-base font-semibold text-slate-800 dark:text-white/90">
               {isLoading
                 ? '⚔️ Battle in progress…'
                 : hasResult
                 ? '🏆 Battle Complete'
                 : 'New Battle'}
             </h2>
-            <p className="text-white/30 text-xs mt-0.5">
+            <p className="text-slate-500 dark:text-white/40 text-xs mt-0.5">
               {isLoading
                 ? 'Mistral & Cohere are generating responses…'
                 : hasResult
@@ -186,8 +186,8 @@ export default function App() {
 
           {/* Live indicator when loading */}
           {isLoading && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-white/10 text-xs text-white/60">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-slate-200 dark:border-white/10 text-xs text-slate-600 dark:text-white/60">
+              <span className="w-2 h-2 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
               Live
             </div>
           )}
