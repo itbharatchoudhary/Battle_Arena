@@ -125,6 +125,14 @@ export default function JudgePanel({ judge, isLoading, problem }) {
           {/* Reasoning Accordions */}
           <div className="flex flex-col gap-2">
             <p className="text-xs text-white/40 font-medium uppercase tracking-widest mb-1">Judge Reasoning</p>
+            {judge.ideal_solution && (
+              <ReasoningAccordion
+                label="Gemini's Ideal Answer"
+                icon="💡"
+                reasoning={judge.ideal_solution}
+                color="blue"
+              />
+            )}
             <ReasoningAccordion
               label="Mistral"
               icon="🔥"

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export default function TypewriterText({ text, speed = 8, className = '', onDone }) {
+export default function TypewriterText({ text, speed = 8, className = '', onDone, onUpdate }) {
   const [displayed, setDisplayed] = useState('');
   const indexRef = useRef(0);
   const rafRef = useRef(null);
@@ -21,6 +21,7 @@ export default function TypewriterText({ text, speed = 8, className = '', onDone
         indexRef.current = Math.min(indexRef.current + charsThisFrame, text.length);
         setDisplayed(text.slice(0, indexRef.current));
         lastTimeRef.current = timestamp;
+        onUpdate?.();
       }
 
       if (indexRef.current < text.length) {

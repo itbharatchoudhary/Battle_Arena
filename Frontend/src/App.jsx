@@ -9,9 +9,9 @@ import { useArena } from './hooks/useArena';
 function EmptyState() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 26 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -16 }}
+      exit={{ opacity: 0, y: -26 }}
       transition={{ duration: 0.4 }}
       className="flex flex-col items-center justify-center flex-1 gap-8 px-6 py-12 text-center"
     >

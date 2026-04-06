@@ -31,7 +31,7 @@ export function useArena() {
     setError(null);
 
     try {
-      const { data } = await api.post('/invoke', { problem });
+      const { data } = await api.post('/invoke', {  input: problem });
 
       if (!data.success) throw new Error('API returned success: false');
 

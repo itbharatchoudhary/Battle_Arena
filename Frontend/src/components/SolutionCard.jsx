@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import TypewriterText from './TypewriterText';
 import Skeleton from './Skeleton';
@@ -26,6 +26,7 @@ const MODELS = {
 
 export default function SolutionCard({ model, content, isLoading, isWinner }) {
   const [copied, setCopied] = useState(false);
+  const scrollRef = useRef(null);
   const meta = MODELS[model];
 
   const handleCopy = async () => {
@@ -34,6 +35,12 @@ export default function SolutionCard({ model, content, isLoading, isWinner }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {}
+  };
+
+  const handleUpdate = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
   };
 
   return (
@@ -95,12 +102,12 @@ export default function SolutionCard({ model, content, isLoading, isWinner }) {
       </div>
 
       {/* Card Body */}
-      <div className="flex-1 overflow-y-auto p-5 text-sm leading-relaxed text-white/80 font-light">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 text-sm leading-relaxed text-white/80 font-light scroll-smooth">
         {isLoading ? (
           <Skeleton />
         ) : content ? (
           <div className="prose prose-invert prose-sm max-w-none">
-            <TypewriterText text={content} speed={2} />
+            <TypewriterText text={content} speed={2} onUpdate={handleUpdate} />
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-white/30 gap-3">
