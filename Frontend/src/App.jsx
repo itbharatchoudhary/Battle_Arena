@@ -142,11 +142,9 @@ export default function App() {
   useEffect(() => {
     const root = document.documentElement;
     if (darkMode) {
-      root.classList.remove('light');
-      document.body.classList.remove('light');
+      root.classList.add('dark');
     } else {
-      root.classList.add('light');
-      document.body.classList.add('light');
+      root.classList.remove('dark');
     }
   }, [darkMode]);
 
