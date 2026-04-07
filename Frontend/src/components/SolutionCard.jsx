@@ -34,7 +34,7 @@ export default function SolutionCard({ model, content, isLoading, isWinner }) {
       await navigator.clipboard.writeText(content || '');
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {}
+    } catch { }
   };
 
   const handleUpdate = () => {
@@ -62,8 +62,9 @@ export default function SolutionCard({ model, content, isLoading, isWinner }) {
           </div>
           <div>
             <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${meta.badge}`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${meta.dot} animate-pulse`} />
-              {meta.label}
+              <span className="text-slate-800 dark:text-white/80">
+                {meta.label}
+              </span>
             </div>
           </div>
         </div>
