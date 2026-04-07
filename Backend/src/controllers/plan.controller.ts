@@ -6,17 +6,19 @@ export const plansData = [
     id: "free",
     name: "Free",
     price: 0,
-    features: ["5 uses per month"]
+    features: ["5 uses per month", "Basic AI models", "Standard response time"]
   },
   {
     id: "pro",
     name: "Pro",
-    price: 9.99
+    price: 9.99,
+    features: ["Unlimited uses", "Priority processing", "Advanced AI models", "Faster responses"]
   },
   {
     id: "premium",
     name: "Premium",
-    price: 19.99
+    price: 19.99,
+    features: ["Everything in Pro", "Custom AI training", "API access", "24/7 support"]
   }
 ];
 

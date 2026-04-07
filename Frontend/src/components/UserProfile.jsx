@@ -116,7 +116,7 @@ function PlanCard({ plan, isCurrent, onUpgrade, isLoading }) {
           <span className="text-slate-500 dark:text-white/60">/month</span>
         </div>
         <ul className="text-sm text-slate-600 dark:text-white/70 space-y-2 mb-6">
-          {plan.features.map((feature, index) => (
+          {(plan.features || []).map((feature, index) => (
             <li key={index} className="flex items-center gap-2">
               <span className="text-green-500">✓</span>
               {feature}
@@ -174,6 +174,7 @@ export default function UserProfile({ onBack }) {
   const [error, setError] = useState(null);
   const [upgrading, setUpgrading] = useState(false);
   const [toast, setToast] = useState(null);
+  const [upgradeHint, setUpgradeHint] = useState('');
 
   useEffect(() => {
     fetchData();
@@ -199,6 +200,9 @@ export default function UserProfile({ onBack }) {
   };
 
   const handleUpgrade = async (planId) => {
+    setUpgradeHint('Experimental mode: this upgrade is simulated and free.');
+    setToast({ message: 'Upgrade initiated — experimental mode is active.', type: 'info' });
+
     try {
       setUpgrading(true);
       await api.post('/upgrade', { planId });
@@ -215,10 +219,36 @@ export default function UserProfile({ onBack }) {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-white/60">Loading profile...</p>
+      <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-6">
+        <div className="w-full max-w-4xl">
+          <div className="flex items-center justify-between gap-4 mb-6">
+            <button
+              onClick={onBack}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to Battle
+            </button>
+            <button
+              disabled
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 text-white font-medium shadow-md shadow-violet-500/20 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Reloading
+            </button>
+          </div>
+        </div>
+
+        <div className="w-full max-w-2xl bg-white dark:bg-slate-800/50 rounded-3xl p-8 shadow-lg shadow-slate-200/30 dark:shadow-slate-900/40 border border-slate-200 dark:border-white/10">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <div className="w-14 h-14 border-4 border-violet-500 border-t-transparent rounded-full animate-spin" />
+            <div>
+              <h2 className="text-xl font-semibold text-slate-800 dark:text-white">Loading Profile</h2>
+              <p className="text-sm text-slate-500 dark:text-white/60">Fetching your latest profile, plan, and usage data. The reload button remains visible so the UI feels stable.</p>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -260,6 +290,11 @@ export default function UserProfile({ onBack }) {
       <div className="max-w-4xl mx-auto space-y-6">
         <UserCard user={user} />
         <UsageLimit usage={usage} onUpgrade={() => handleUpgrade(plans.find(p => p.name === 'Pro')?.id)} />
+        {upgradeHint && (
+          <div className="rounded-2xl border border-amber-200/80 bg-amber-50/80 p-4 text-sm text-amber-700 dark:border-amber-500/40 dark:bg-amber-950/30 dark:text-amber-300">
+            {upgradeHint}
+          </div>
+        )}
         <PlansSection
           plans={plans}
           currentPlan={user?.plan}

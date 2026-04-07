@@ -81,6 +81,45 @@ function ErrorBanner({ message, onDismiss }) {
   );
 }
 
+function AppLoader() {
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950 text-white px-6">
+      <div className="flex items-center justify-center w-28 h-28 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 shadow-2xl shadow-violet-500/40 mb-6">
+        <span className="text-4xl"></span>
+      </div>
+      <h1 className="text-4xl font-bold mb-2"> Battle Arena </h1>
+      <p className="max-w-md text-center text-slate-300 mb-8">
+        Experimental mode is active. Loading the Battle Arena experience for you now.
+      </p>
+      <div className="w-40 h-2 rounded-full overflow-hidden bg-white/10">
+        <div className="h-full w-full bg-gradient-to-r from-violet-400 to-blue-400 animate-pulse" />
+      </div>
+    </div>
+  );
+}
+
+function EntryScreen({ onEnter }) {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 text-white px-6">
+      <div className="rounded-[2.5rem] bg-slate-900/80 border border-white/10 shadow-2xl shadow-slate-950/40 p-10 max-w-xl w-full text-center">
+        <div className="mx-auto mb-6 w-24 h-24 rounded-3xl bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center shadow-lg shadow-violet-500/20">
+          <span className="text-4xl"></span>
+        </div>
+        <h1 className="text-4xl font-semibold mb-3">Welcome</h1>
+        <p className="text-slate-300 mb-8 text-sm leading-7">
+          Battle Arena is an experimental AI battle station. Sign in or register after entering, and experience the profile, usage, and plan workflow.
+        </p>
+        <button
+          onClick={onEnter}
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-blue-600 px-8 py-3 text-white font-semibold shadow-lg shadow-violet-500/30 hover:scale-[1.01] transition-all"
+        >
+          Enter the Arena
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function BattleView({ result, isLoading }) {
   const winner =
     result?.judge
@@ -143,6 +182,8 @@ export default function App() {
   const [authView, setAuthView] = useState('login'); // 'login' or 'register'
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAppLoading, setIsAppLoading] = useState(true);
+  const [entryCompleted, setEntryCompleted] = useState(false);
   const { status, result, error, history, submitProblem, reset, loadFromHistory, clearHistory } = useArena();
 
   // Check for existing authentication on app load
@@ -161,6 +202,11 @@ export default function App() {
         localStorage.removeItem('user');
       }
     }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAppLoading(false), 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   // Sync dark mode class on <html>
@@ -204,9 +250,15 @@ export default function App() {
   const hasResult = status === 'success';
   const showBattle = isLoading || hasResult;
 
+  if (isAppLoading) {
+    return <AppLoader />;
+  }
+
   return (
     <>
-      {!isAuthenticated ? (
+      {!entryCompleted ? (
+        <EntryScreen onEnter={() => setEntryCompleted(true)} />
+      ) : !isAuthenticated ? (
         authView === 'login' ? (
           <Login
             onLogin={handleLogin}

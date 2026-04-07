@@ -30,7 +30,8 @@
 
   body {
     @apply bg-slate-50 text-slate-900 transition-colors duration-300 min-h-screen;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   /* Dark mode background gradient */

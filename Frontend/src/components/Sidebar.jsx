@@ -163,12 +163,17 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
         </div>
       </div>
 
-      {/* User Info */}
+      {/* User Info / Profile Entry */}
       <div className="px-2 py-3 border-t border-slate-200 dark:border-white/10 shrink-0">
-        <div className={`
-          flex items-center gap-3 px-3 py-2 rounded-xl glass
-          ${collapsed ? 'justify-center' : ''}
-        `}>
+        <div
+          onClick={onProfile}
+          title="Open profile"
+          className={`
+            flex items-center gap-3 px-3 py-2 rounded-xl glass cursor-pointer
+            ${collapsed ? 'justify-center' : ''}
+            hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors
+          `}
+        >
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-sm shrink-0">
             {user?.avatar || '👤'}
           </div>
@@ -183,7 +188,10 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
             </div>
           )}
           <button
-            onClick={onLogout}
+            onClick={(event) => {
+              event.stopPropagation();
+              onLogout();
+            }}
             className="text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors shrink-0"
             title="Logout"
           >
