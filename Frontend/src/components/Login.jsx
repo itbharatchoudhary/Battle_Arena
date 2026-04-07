@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import api from '../lib/axios';
 
-export default function Login({ onLogin, onSwitchToRegister }) {
+export default function Login({ onLogin, onRequireVerification, onSwitchToRegister }) {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -25,7 +25,12 @@ export default function Login({ onLogin, onSwitchToRegister }) {
 
       onLogin(user);
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      const data = err.response?.data;
+      if (data?.requiresVerification) {
+        onRequireVerification(formData.email, data.message || 'Please verify your email.');
+        return;
+      }
+      setError(data?.error || 'Login failed');
     } finally {
       setLoading(false);
     }

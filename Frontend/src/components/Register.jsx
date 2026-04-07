@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import api from '../lib/axios';
 
-export default function Register({ onRegister, onSwitchToLogin }) {
+export default function Register({ onRegister, onRequireVerification, onSwitchToLogin }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -34,8 +34,12 @@ export default function Register({ onRegister, onSwitchToLogin }) {
         email: formData.email,
         password: formData.password
       });
-      const { token, user } = response.data;
+      if (response.data?.needsVerification) {
+        onRequireVerification(formData.email, response.data.message);
+        return;
+      }
 
+      const { token, user } = response.data;
       // Store token in localStorage
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));

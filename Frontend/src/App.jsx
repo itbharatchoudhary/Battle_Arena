@@ -7,6 +7,8 @@ import JudgePanel from './components/JudgePanel';
 import UserProfile from './components/UserProfile';
 import Login from './components/Login';
 import Register from './components/Register';
+import VerifyEmail from './components/VerifyEmail';
+import api from './lib/axios';
 import { useArena } from './hooks/useArena';
 
 function EmptyState() {
@@ -179,9 +181,13 @@ function BattleView({ result, isLoading }) {
 export default function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [currentView, setCurrentView] = useState('battle'); // 'battle' or 'profile'
-  const [authView, setAuthView] = useState('login'); // 'login' or 'register'
+  const [authView, setAuthView] = useState('login'); // 'login', 'register', or 'verify'
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [verificationEmail, setVerificationEmail] = useState('');
+  const [verificationMessage, setVerificationMessage] = useState('');
+  const [verificationLoading, setVerificationLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [entryCompleted, setEntryCompleted] = useState(false);
   const { status, result, error, history, submitProblem, reset, loadFromHistory, clearHistory } = useArena();
@@ -219,6 +225,14 @@ export default function App() {
     }
   }, [darkMode]);
 
+  const completeAuth = (token, userData) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+    setIsAuthenticated(true);
+    setCurrentView('battle');
+  };
+
   const handleLogin = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
@@ -229,6 +243,51 @@ export default function App() {
     setUser(userData);
     setIsAuthenticated(true);
     setCurrentView('battle');
+  };
+
+  const handleRequireVerification = (email, message) => {
+    setVerificationEmail(email);
+    setVerificationMessage(message || 'Enter the verification code sent to your email.');
+    setAuthView('verify');
+  };
+
+  const handleVerifyEmail = async (otp) => {
+    if (!verificationEmail) return;
+    setVerificationLoading(true);
+    try {
+      const response = await api.post('/auth/verify-otp', {
+        email: verificationEmail,
+        otp
+      });
+
+      completeAuth(response.data.token, response.data.user);
+      setVerificationEmail('');
+      setVerificationMessage('');
+      setAuthView('login');
+    } catch (err) {
+      setVerificationMessage(err.response?.data?.error || err.message || 'Verification failed');
+    } finally {
+      setVerificationLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (!verificationEmail) return;
+    setResendLoading(true);
+    try {
+      const response = await api.post('/auth/resend-otp', { email: verificationEmail });
+      setVerificationMessage(response.data.message || 'A new code has been sent to your email.');
+    } catch (err) {
+      setVerificationMessage(err.response?.data?.error || err.message || 'Unable to resend OTP');
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
+  const handleCancelVerification = () => {
+    setAuthView('login');
+    setVerificationEmail('');
+    setVerificationMessage('');
   };
 
   const handleLogout = () => {
@@ -259,14 +318,26 @@ export default function App() {
       {!entryCompleted ? (
         <EntryScreen onEnter={() => setEntryCompleted(true)} />
       ) : !isAuthenticated ? (
-        authView === 'login' ? (
+        authView === 'verify' ? (
+          <VerifyEmail
+            email={verificationEmail}
+            message={verificationMessage}
+            onVerify={handleVerifyEmail}
+            onResend={handleResendOtp}
+            onCancel={handleCancelVerification}
+            isSubmitting={verificationLoading}
+            isResending={resendLoading}
+          />
+        ) : authView === 'login' ? (
           <Login
             onLogin={handleLogin}
+            onRequireVerification={handleRequireVerification}
             onSwitchToRegister={() => setAuthView('register')}
           />
         ) : (
           <Register
             onRegister={handleRegister}
+            onRequireVerification={handleRequireVerification}
             onSwitchToLogin={() => setAuthView('login')}
           />
         )

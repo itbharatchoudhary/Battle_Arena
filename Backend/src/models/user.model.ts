@@ -12,7 +12,13 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default: "👤"
-  }
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  otpCode: String,
+  otpExpiresAt: Date
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);
