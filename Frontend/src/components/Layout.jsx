@@ -1,6 +1,6 @@
 import Sidebar from './Sidebar';
 
-export default function Layout({ children, history, onSelectHistory, onClearHistory, darkMode, onToggleDark, onNewBattle }) {
+export default function Layout({ children, history, onSelectHistory, onClearHistory, darkMode, onToggleDark, onNewBattle, onProfile, user, onLogout }) {
   return (
     <div className="flex h-screen w-screen overflow-hidden">
       <Sidebar
@@ -10,6 +10,9 @@ export default function Layout({ children, history, onSelectHistory, onClearHist
         darkMode={darkMode}
         onToggleDark={onToggleDark}
         onNewBattle={onNewBattle}
+        onProfile={onProfile}
+        user={user}
+        onLogout={onLogout}
       />
       <main className="flex-1 overflow-hidden flex flex-col">
         {children}

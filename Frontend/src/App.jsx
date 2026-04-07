@@ -4,6 +4,9 @@ import Layout from './components/Layout';
 import PromptInput from './components/PromptInput';
 import SolutionCard from './components/SolutionCard';
 import JudgePanel from './components/JudgePanel';
+import UserProfile from './components/UserProfile';
+import Login from './components/Login';
+import Register from './components/Register';
 import { useArena } from './hooks/useArena';
 
 function EmptyState() {
@@ -136,7 +139,29 @@ function BattleView({ result, isLoading }) {
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(true);
+  const [currentView, setCurrentView] = useState('battle'); // 'battle' or 'profile'
+  const [authView, setAuthView] = useState('login'); // 'login' or 'register'
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { status, result, error, history, submitProblem, reset, loadFromHistory, clearHistory } = useArena();
+
+  // Check for existing authentication on app load
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const storedUser = localStorage.getItem('user');
+
+    if (token && storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+      } catch (error) {
+        // Invalid stored data, clear it
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+    }
+  }, []);
 
   // Sync dark mode class on <html>
   useEffect(() => {
@@ -148,81 +173,130 @@ export default function App() {
     }
   }, [darkMode]);
 
+  const handleLogin = (userData) => {
+    setUser(userData);
+    setIsAuthenticated(true);
+    setCurrentView('battle');
+  };
+
+  const handleRegister = (userData) => {
+    setUser(userData);
+    setIsAuthenticated(true);
+    setCurrentView('battle');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+    setIsAuthenticated(false);
+    setCurrentView('battle');
+    reset();
+  };
+
+  const onProfile = () => setCurrentView('profile');
+  const onNewBattle = () => {
+    setCurrentView('battle');
+    reset();
+  };
+
   const isLoading = status === 'loading';
   const hasResult = status === 'success';
   const showBattle = isLoading || hasResult;
 
   return (
-    <Layout
-      history={history}
-      onSelectHistory={loadFromHistory}
-      onClearHistory={clearHistory}
-      darkMode={darkMode}
-      onToggleDark={() => setDarkMode((d) => !d)}
-      onNewBattle={reset}
-    >
-      <div className="flex flex-col h-full px-6 py-5 gap-4 overflow-hidden">
+    <>
+      {!isAuthenticated ? (
+        authView === 'login' ? (
+          <Login
+            onLogin={handleLogin}
+            onSwitchToRegister={() => setAuthView('register')}
+          />
+        ) : (
+          <Register
+            onRegister={handleRegister}
+            onSwitchToLogin={() => setAuthView('login')}
+          />
+        )
+      ) : (
+        <Layout
+          history={history}
+          onSelectHistory={loadFromHistory}
+          onClearHistory={clearHistory}
+          darkMode={darkMode}
+          onToggleDark={() => setDarkMode((d) => !d)}
+          onNewBattle={onNewBattle}
+          onProfile={onProfile}
+          user={user}
+          onLogout={handleLogout}
+        >
+          {currentView === 'profile' ? (
+            <UserProfile onBack={() => setCurrentView('battle')} />
+          ) : (
+            <div className="flex flex-col h-full px-6 py-5 gap-4 overflow-hidden">
 
-        {/* Top Bar */}
-        <div className="flex items-center justify-between shrink-0">
-          <div>
-            <h2 className="text-base font-semibold text-slate-800 dark:text-white/90">
-              {isLoading
-                ? '⚔️ Battle in progress…'
-                : hasResult
-                ? '🏆 Battle Complete'
-                : 'New Battle'}
-            </h2>
-            <p className="text-slate-500 dark:text-white/40 text-xs mt-0.5">
-              {isLoading
-                ? 'Mistral & Cohere are generating responses…'
-                : hasResult
-                ? 'Gemini has delivered the verdict.'
-                : 'Ask any question to pit two AIs against each other.'}
-            </p>
+          {/* Top Bar */}
+          <div className="flex items-center justify-between shrink-0">
+            <div>
+              <h2 className="text-base font-semibold text-slate-800 dark:text-white/90">
+                {isLoading
+                  ? '⚔️ Battle in progress…'
+                  : hasResult
+                  ? '🏆 Battle Complete'
+                  : 'New Battle'}
+              </h2>
+              <p className="text-slate-500 dark:text-white/40 text-xs mt-0.5">
+                {isLoading
+                  ? 'Mistral & Cohere are generating responses…'
+                  : hasResult
+                  ? 'Gemini has delivered the verdict.'
+                  : 'Ask any question to pit two AIs against each other.'}
+              </p>
+            </div>
+
+            {/* Live indicator when loading */}
+            {isLoading && (
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-slate-200 dark:border-white/10 text-xs text-slate-600 dark:text-white/60">
+                <span className="w-2 h-2 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
+                Live
+              </div>
+            )}
           </div>
 
-          {/* Live indicator when loading */}
-          {isLoading && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-slate-200 dark:border-white/10 text-xs text-slate-600 dark:text-white/60">
-              <span className="w-2 h-2 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
-              Live
-            </div>
-          )}
-        </div>
-
-        {/* Error Banner */}
-        <AnimatePresence>
-          {error && (
-            <ErrorBanner message={error} onDismiss={reset} />
-          )}
-        </AnimatePresence>
-
-        {/* Prompt Input */}
-        <div className="shrink-0">
-          <PromptInput
-            onSubmit={submitProblem}
-            isLoading={isLoading}
-            onReset={reset}
-            hasResult={hasResult}
-          />
-        </div>
-
-        {/* Main Content Area */}
-        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
-          <AnimatePresence mode="wait">
-            {showBattle ? (
-              <BattleView
-                key="battle"
-                result={result}
-                isLoading={isLoading}
-              />
-            ) : (
-              <EmptyState key="empty" />
+          {/* Error Banner */}
+          <AnimatePresence>
+            {error && (
+              <ErrorBanner message={error} onDismiss={reset} />
             )}
           </AnimatePresence>
+
+          {/* Prompt Input */}
+          <div className="shrink-0">
+            <PromptInput
+              onSubmit={submitProblem}
+              isLoading={isLoading}
+              onReset={reset}
+              hasResult={hasResult}
+            />
+          </div>
+
+          {/* Main Content Area */}
+          <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+            <AnimatePresence mode="wait">
+              {showBattle ? (
+                <BattleView
+                  key="battle"
+                  result={result}
+                  isLoading={isLoading}
+                />
+              ) : (
+                <EmptyState key="empty" />
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-      </div>
+      )}
     </Layout>
-  );
+  )}
+</>);
 }

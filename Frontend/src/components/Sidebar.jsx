@@ -16,7 +16,7 @@ function formatDate(iso) {
   return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
 }
 
-export default function Sidebar({ history, onSelectHistory, onClearHistory, darkMode, onToggleDark, onNewBattle }) {
+export default function Sidebar({ history, onSelectHistory, onClearHistory, darkMode, onToggleDark, onNewBattle, onProfile, user, onLogout }) {
   const [collapsed, setCollapsed] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
 
@@ -75,6 +75,25 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
           </svg>
           {!collapsed && <span>New Battle</span>}
+        </button>
+      </div>
+
+      {/* Profile Button */}
+      <div className="px-2 pb-3 shrink-0">
+        <button
+          id="profile-btn"
+          onClick={onProfile}
+          className={`
+            w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium
+            glass-hover transition-all
+            ${collapsed ? 'justify-center' : ''}
+          `}
+          title="User Profile"
+        >
+          <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          {!collapsed && <span>Profile</span>}
         </button>
       </div>
 
@@ -141,6 +160,37 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
               )}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* User Info */}
+      <div className="px-2 py-3 border-t border-slate-200 dark:border-white/10 shrink-0">
+        <div className={`
+          flex items-center gap-3 px-3 py-2 rounded-xl glass
+          ${collapsed ? 'justify-center' : ''}
+        `}>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-sm shrink-0">
+            {user?.avatar || '👤'}
+          </div>
+          {!collapsed && (
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-slate-800 dark:text-white truncate">
+                {user?.name || 'User'}
+              </p>
+              <p className="text-xs text-slate-500 dark:text-white/60 truncate">
+                {user?.plan === 'free' ? 'Free User' : `${user?.plan?.charAt(0).toUpperCase() + user?.plan?.slice(1)} User`}
+              </p>
+            </div>
+          )}
+          <button
+            onClick={onLogout}
+            className="text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors shrink-0"
+            title="Logout"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </button>
         </div>
       </div>
 
