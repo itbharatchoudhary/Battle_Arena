@@ -9,15 +9,15 @@ import { useArena } from './hooks/useArena';
 function EmptyState() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 26 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -26 }}
+      exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.4 }}
-      className="flex flex-col items-center justify-center flex-1 gap-8 px-6 py-12 text-center"
+      className="h-screen flex flex-col items-center justify-center flex-1 gap-8 px-6 py-12 text-center"
     >
       {/* Hero icon */}
       <div className="relative">
-        <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-violet-600/30 to-blue-600/30 border border-white/10 flex items-center justify-center text-5xl shadow-2xl shadow-violet-500/20">
+        <div className="w-24 h-30 rounded-3xl bg-gradient-to-br from-violet-600/30 to-blue-600/30 border border-white/10 flex items-center justify-center text-5xl shadow-2xl shadow-violet-500/20">
           ⚔️
         </div>
         <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-br from-orange-500 to-amber-400 border-2 border-slate-900 flex items-center justify-center text-xs">

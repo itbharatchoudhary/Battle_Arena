@@ -106,9 +106,7 @@ export default function SolutionCard({ model, content, isLoading, isWinner }) {
         {isLoading ? (
           <Skeleton />
         ) : content ? (
-          <div className="prose dark:prose-invert prose-sm max-w-none">
-            <TypewriterText text={content} speed={2} onUpdate={handleUpdate} />
-          </div>
+          <TypewriterText text={content} speed={2} onUpdate={handleUpdate} />
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-slate-400 dark:text-white/30 gap-3">
             <span className="text-4xl opacity-30">{meta.icon}</span>

@@ -22,7 +22,7 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
 
   return (
     <motion.aside
-      animate={{ width: collapsed ? 56 : 260 }}
+      animate={{ width: collapsed ? 80 : 260 }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
       className="glass border-r border-slate-200 dark:border-white/10 flex flex-col h-full shrink-0 overflow-hidden"
     >

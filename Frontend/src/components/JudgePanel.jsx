@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ScoreBar from './ScoreBar';
 import { JudgeSkeleton } from './Skeleton';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 function ChevronIcon({ open }) {
   return (
@@ -38,8 +42,34 @@ function ReasoningAccordion({ label, icon, reasoning, color }) {
             transition={{ duration: 0.25, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div className="px-4 pb-4 pt-2 text-sm text-slate-600 dark:text-white/60 leading-relaxed border-t border-slate-200 dark:border-white/10">
-              {reasoning}
+            <div className="px-4 pb-4 pt-2 text-sm text-slate-600 dark:text-white/60 leading-relaxed border-t border-slate-200 dark:border-white/10 prose dark:prose-invert prose-sm max-w-none">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  code({ node, inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    return !inline && match ? (
+                      <div className="relative group my-4">
+                        <SyntaxHighlighter
+                          style={vscDarkPlus}
+                          language={match[1]}
+                          PreTag="div"
+                          className="rounded-xl !bg-slate-900 border border-white/10 !m-0"
+                          {...props}
+                        >
+                          {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                      </div>
+                    ) : (
+                      <code className={`${className} bg-slate-100 dark:bg-white/10 px-1.5 py-0.5 rounded-md font-mono text-xs`} {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+                }}
+              >
+                {reasoning}
+              </ReactMarkdown>
             </div>
           </motion.div>
         )}

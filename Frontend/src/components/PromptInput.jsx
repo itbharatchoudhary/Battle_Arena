@@ -5,13 +5,19 @@ export default function PromptInput({ onSubmit, isLoading, onReset, hasResult })
   const textareaRef = useRef(null);
 
   useEffect(() => {
-    if (textareaRef.current && !isLoading) {
-      textareaRef.current.focus();
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  }, [isLoading]);
+  }, []);
+
+  const handleInput = (e) => {
+    e.target.style.height = 'auto';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  };
 
   const handleKeyDown = (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       submit();
     }
@@ -21,6 +27,11 @@ export default function PromptInput({ onSubmit, isLoading, onReset, hasResult })
     const value = textareaRef.current?.value?.trim();
     if (!value || isLoading) return;
     onSubmit(value);
+    // Reset height after submit
+    if (textareaRef.current) {
+      textareaRef.current.value = '';
+      textareaRef.current.style.height = 'auto';
+    }
   };
 
   return (
@@ -29,16 +40,17 @@ export default function PromptInput({ onSubmit, isLoading, onReset, hasResult })
         <textarea
           ref={textareaRef}
           id="prompt-input"
-          rows={3}
+          rows={1}
           disabled={isLoading}
+          onInput={handleInput}
           onKeyDown={handleKeyDown}
           className="
             w-full bg-transparent px-5 pt-4 pb-2 text-sm text-slate-800 dark:text-white
             placeholder-slate-400 dark:placeholder-white/30 resize-none focus:outline-none
             disabled:opacity-50 disabled:cursor-not-allowed
-            leading-relaxed
+            leading-relaxed overflow-hidden py-1.5
           "
-          placeholder="Ask anything… Ctrl+Enter to submit"
+          placeholder="Ask anything… Enter to submit, Shift+Enter for new line"
         />
 
         <div className="flex items-center justify-between px-4 pb-3 pt-1">
