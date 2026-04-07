@@ -33,36 +33,53 @@ export default function ScoreBar({ label, score, color, isWinner, delay = 0 }) {
   const stars = Math.round(score / 2);
 
   return (
-    <div className={`relative rounded-2xl p-4 transition-all duration-300 ${
-      isWinner
-        ? 'ring-2 ring-yellow-400/60 bg-yellow-400/5'
-        : 'bg-white/5'
-    }`}>
+    <div
+      className={`relative rounded-2xl p-4 transition-all duration-300 ${isWinner
+          ? 'ring-2 ring-yellow-400/60 bg-yellow-400/10 dark:bg-yellow-400/5'
+          : 'bg-slate-200/60 dark:bg-white/5'
+        }`}
+    >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           {isWinner && (
             <span className="text-lg" title="Winner">👑</span>
           )}
-          <span className="font-semibold text-sm text-white/90">{label}</span>
+          <span className="font-semibold text-sm text-slate-800 dark:text-white/90">
+            {label}
+          </span>
         </div>
+
         <div className="flex items-center gap-2">
-          <span className="text-yellow-400 text-xs tracking-wider">
+          <span className="text-yellow-500 dark:text-yellow-400 text-xs tracking-wider">
             {'⭐'.repeat(stars)}{'☆'.repeat(5 - stars)}
           </span>
-          <span className={`text-2xl font-bold tabular-nums ${isWinner ? 'text-yellow-400' : 'text-white/80'}`}>
+
+          <span
+            className={`text-2xl font-bold tabular-nums ${isWinner
+                ? 'text-yellow-500 dark:text-yellow-400'
+                : 'text-slate-900 dark:text-white/80'
+              }`}
+          >
             {count.toFixed(1)}
           </span>
-          <span className="text-white/40 text-sm">/10</span>
+
+          <span className="text-slate-500 dark:text-white/40 text-sm">
+            /10
+          </span>
         </div>
       </div>
 
-      <div className="h-2.5 rounded-full bg-white/10 overflow-hidden">
+      <div className="h-2.5 rounded-full bg-slate-300 dark:bg-white/10 overflow-hidden">
         <motion.div
           className="h-full rounded-full"
           style={{ background: color }}
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
-          transition={{ duration: 1.4, delay: delay / 1000, ease: [0.16, 1, 0.3, 1] }}
+          transition={{
+            duration: 1.4,
+            delay: delay / 1000,
+            ease: [0.16, 1, 0.3, 1],
+          }}
         />
       </div>
     </div>
