@@ -79,7 +79,7 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
       </div>
 
       {/* Profile Button */}
-      <div className="px-2 pb-3 shrink-0">
+      {/* <div className="px-2 pb-3 shrink-0">
         <button
           id="profile-btn"
           onClick={onProfile}
@@ -95,7 +95,7 @@ export default function Sidebar({ history, onSelectHistory, onClearHistory, dark
           </svg>
           {!collapsed && <span>Profile</span>}
         </button>
-      </div>
+      </div> */}
 
       {/* History */}
       <div className="flex-1 overflow-y-auto px-2 pb-2">
